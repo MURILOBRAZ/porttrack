@@ -1,0 +1,20 @@
+[project]
+name = "porttrack"
+version = "1.0.0"
+description = "Sistema web e API REST para gestão de contêineres e movimentações portuárias."
+requires-python = ">=3.12"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["migrations", ".venv", "staticfiles"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "DJ", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+"conteineres/tests/*" = ["E501"]
+
+[tool.coverage.run]
+source = ["conteineres", "config"]
+omit = ["*/migrations/*", "*/tests/*", "config/asgi.py", "config/wsgi.py", "manage.py"]

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.coverage
+htmlcov/
+.ruff_cache/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+
+# Ambiente
+.env
+
+# Vercel
+.vercel/
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
