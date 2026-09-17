@@ -3,6 +3,23 @@ name = "porttrack"
 version = "1.0.0"
 description = "Sistema web e API REST para gestão de contêineres e movimentações portuárias."
 requires-python = ">=3.12"
+# Mantenha em sincronia com requirements.txt (a Vercel instala a partir deste arquivo).
+dependencies = [
+    "Django>=5.2.8,<6.0",
+    "djangorestframework>=3.16,<4.0",
+    "drf-spectacular>=0.28,<1.0",
+    "django-filter>=25.1",
+    "dj-database-url>=2.3",
+    "whitenoise>=6.9",
+    "psycopg[binary]>=3.2",
+]
+
+[dependency-groups]
+dev = ["ruff>=0.8", "coverage>=7.6"]
+
+[tool.uv]
+# Aplicação, não biblioteca: não empacotar o projeto, só instalar as dependências.
+package = false
 
 [tool.ruff]
 line-length = 120
