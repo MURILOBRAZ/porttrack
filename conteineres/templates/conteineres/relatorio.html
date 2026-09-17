@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Relatório{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+  <div>
+    <h1 class="h3 fw-bold mb-0">Relatório de movimentações</h1>
+    <small class="text-body-secondary">Total por cliente e tipo de movimentação</small>
+  </div>
+  <div class="d-flex gap-2">
+    <button type="button" class="btn btn-outline-secondary" onclick="window.print()"><i class="bi bi-printer"></i> Imprimir</button>
+    <a href="{% url 'relatorio_csv' %}" class="btn btn-primary"><i class="bi bi-filetype-csv"></i> Exportar CSV</a>
+  </div>
+</div>
+
+{% with c=indicadores.conteineres %}
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body">
+    <div class="text-body-secondary small">Importação</div><div class="fs-3 fw-bold">{{ c.importacao }}</div><small class="text-body-secondary">contêineres</small>
+  </div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body">
+    <div class="text-body-secondary small">Exportação</div><div class="fs-3 fw-bold">{{ c.exportacao }}</div><small class="text-body-secondary">contêineres</small>
+  </div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body">
+    <div class="text-body-secondary small">Clientes</div><div class="fs-3 fw-bold">{{ indicadores.clientes }}</div><small class="text-body-secondary">cadastrados</small>
+  </div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body">
+    <div class="text-body-secondary small">Movimentações</div><div class="fs-3 fw-bold">{{ indicadores.movimentacoes.total }}</div><small class="text-body-secondary">no total</small>
+  </div></div></div>
+</div>
+{% endwith %}
+
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            {% for valor, label in tipos %}<th class="text-center">{{ label }}</th>{% endfor %}
+            <th class="text-center">Total</th>
+            <th class="text-center">Imp.</th>
+            <th class="text-center">Exp.</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for linha in linhas %}
+          <tr>
+            <td><a class="fw-semibold text-decoration-none" href="{% url 'cliente_detail' linha.cliente_id %}">{{ linha.cliente }}</a></td>
+            {% for total in linha.por_tipo.values %}
+              <td class="text-center {% if not total %}text-body-tertiary{% endif %}">{{ total }}</td>
+            {% endfor %}
+            <td class="text-center fw-bold">{{ linha.total }}</td>
+            <td class="text-center">{{ linha.importacao }}</td>
+            <td class="text-center">{{ linha.exportacao }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="11" class="text-center text-body-secondary py-4">Sem dados para exibir.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

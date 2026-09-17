@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Entrar{% endblock %}
+{% block main_class %}login-bg d-flex align-items-center justify-content-center px-3{% endblock %}
+{% block content %}
+<div class="card shadow-lg" style="width: 100%; max-width: 400px;">
+  <div class="card-body p-4 p-md-5">
+    <div class="text-center mb-4">
+      <span class="brand-icon fs-4 mb-2" style="width:3rem;height:3rem"><i class="bi bi-box-seam"></i></span>
+      <h1 class="h4 fw-bold mb-1">PortTrack</h1>
+      <p class="text-body-secondary small mb-0">Gestão de contêineres e movimentações</p>
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger py-2 small">Usuário ou senha inválidos.</div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <div class="form-floating mb-3">
+        <input type="text" name="username" id="id_username" class="form-control" placeholder="Usuário" autofocus required value="{{ form.username.value|default:'' }}">
+        <label for="id_username">Usuário</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" name="password" id="id_password" class="form-control" placeholder="Senha" required>
+        <label for="id_password">Senha</label>
+      </div>
+      <button class="btn btn-primary w-100 py-2" type="submit">Entrar</button>
+    </form>
+
+    {% if show_demo %}
+    <div class="alert alert-info small mt-4 mb-0">
+      <i class="bi bi-info-circle"></i> Acesso de demonstração:<br>
+      usuário <code>demo</code> · senha <code>demo1234</code>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

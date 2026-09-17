@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Contêineres{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <div>
+    <h1 class="h3 fw-bold mb-0">Contêineres</h1>
+    <small class="text-body-secondary">{{ page_obj.paginator.count|default:0 }} encontrado{{ page_obj.paginator.count|pluralize }}</small>
+  </div>
+  <a href="{% url 'conteiner_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Novo contêiner</a>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <form method="get" class="row g-2 align-items-end">
+      {% include "conteineres/_select.html" with field=filter.form.q col="col-md-4" %}
+      {% include "conteineres/_select.html" with field=filter.form.cliente %}
+      {% include "conteineres/_select.html" with field=filter.form.tipo %}
+      {% include "conteineres/_select.html" with field=filter.form.status %}
+      {% include "conteineres/_select.html" with field=filter.form.categoria %}
+      <div class="col-12 d-flex gap-2 justify-content-end">
+        <a href="{% url 'conteiner_list' %}" class="btn btn-outline-secondary">Limpar</a>
+        <button class="btn btn-primary"><i class="bi bi-funnel"></i> Filtrar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead><tr><th>Número</th><th>Cliente</th><th>Tipo</th><th>Status / Categoria</th><th class="text-center">Movimentações</th><th></th></tr></thead>
+        <tbody>
+          {% for c in object_list %}
+          <tr>
+            <td><a class="font-mono fw-semibold text-decoration-none" href="{{ c.get_absolute_url }}">{{ c.numero }}</a></td>
+            <td><a class="text-reset text-decoration-none" href="{{ c.cliente.get_absolute_url }}">{{ c.cliente }}</a></td>
+            <td>{{ c.get_tipo_display }}</td>
+            <td>{% include "conteineres/_badges_conteiner.html" %}</td>
+            <td class="text-center">{{ c.total_movimentacoes }}</td>
+            <td class="text-end text-nowrap">
+              <a href="{% url 'movimentacao_create' %}?conteiner={{ c.pk }}" class="btn btn-sm btn-outline-primary" title="Registrar movimentação"><i class="bi bi-plus-lg"></i></a>
+              <a href="{% url 'conteiner_update' c.pk %}" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="bi bi-pencil"></i></a>
+              <a href="{% url 'conteiner_delete' c.pk %}" class="btn btn-sm btn-outline-danger" title="Excluir"><i class="bi bi-trash"></i></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-center text-body-secondary py-5"><i class="bi bi-inbox fs-3 d-block mb-2"></i>Nenhum contêiner encontrado.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include "conteineres/_pagination.html" %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Confirmar exclusão{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="card border-danger-subtle">
+      <div class="card-body p-4 text-center">
+        <div class="display-6 text-danger mb-2"><i class="bi bi-exclamation-triangle"></i></div>
+        <h1 class="h4 fw-bold">Excluir {{ object|stringformat:"s" }}?</h1>
+        <p class="text-body-secondary">
+          Esta ação não pode ser desfeita.
+          {% if object.movimentacoes.exists %}<br>Todas as movimentações deste contêiner também serão excluídas.{% endif %}
+        </p>
+        <form method="post" class="d-flex justify-content-center gap-2 mt-3">
+          {% csrf_token %}
+          <a href="javascript:history.back()" class="btn btn-outline-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Excluir</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

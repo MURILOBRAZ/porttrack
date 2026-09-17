@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Movimentações{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <div>
+    <h1 class="h3 fw-bold mb-0">Movimentações</h1>
+    <small class="text-body-secondary">{{ page_obj.paginator.count|default:0 }} encontrada{{ page_obj.paginator.count|pluralize }}</small>
+  </div>
+  <a href="{% url 'movimentacao_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nova movimentação</a>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <form method="get" class="row g-2 align-items-end">
+      {% include "conteineres/_select.html" with field=filter.form.q col="col-md-3" %}
+      {% include "conteineres/_select.html" with field=filter.form.cliente %}
+      {% include "conteineres/_select.html" with field=filter.form.tipo %}
+      {% include "conteineres/_select.html" with field=filter.form.data_inicio_de col="col-6 col-md-2 col-lg" %}
+      {% include "conteineres/_select.html" with field=filter.form.data_inicio_ate col="col-6 col-md-2 col-lg" %}
+      {% include "conteineres/_select.html" with field=filter.form.em_andamento col="col-6 col-md-2 col-lg" %}
+      <div class="col-12 d-flex gap-2 justify-content-end">
+        <a href="{% url 'movimentacao_list' %}" class="btn btn-outline-secondary">Limpar</a>
+        <button class="btn btn-primary"><i class="bi bi-funnel"></i> Filtrar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead><tr><th>Contêiner</th><th>Cliente</th><th>Tipo</th><th>Início</th><th>Fim</th><th>Situação</th><th></th></tr></thead>
+        <tbody>
+          {% for m in object_list %}
+          <tr>
+            <td><a class="font-mono fw-semibold text-decoration-none" href="{{ m.conteiner.get_absolute_url }}">{{ m.conteiner.numero }}</a></td>
+            <td>{{ m.conteiner.cliente }}</td>
+            <td>{{ m.get_tipo_display }}</td>
+            <td class="text-nowrap">{{ m.data_inicio|date:"d/m/Y H:i" }}</td>
+            <td class="text-nowrap">{{ m.data_fim|date:"d/m/Y H:i"|default:"—" }}</td>
+            <td>{% include "conteineres/_badge_movimentacao.html" %}</td>
+            <td class="text-end text-nowrap">
+              {% if m.em_andamento %}
+              <form method="post" action="{% url 'movimentacao_finalizar' m.pk %}" class="d-inline">{% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <button class="btn btn-sm btn-outline-success" title="Finalizar agora"><i class="bi bi-check2-circle"></i></button>
+              </form>
+              {% endif %}
+              <a href="{% url 'movimentacao_update' m.pk %}" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="bi bi-pencil"></i></a>
+              <a href="{% url 'movimentacao_delete' m.pk %}" class="btn btn-sm btn-outline-danger" title="Excluir"><i class="bi bi-trash"></i></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7" class="text-center text-body-secondary py-5"><i class="bi bi-inbox fs-3 d-block mb-2"></i>Nenhuma movimentação encontrada.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include "conteineres/_pagination.html" %}
+  </div>
+</div>
+{% endblock %}

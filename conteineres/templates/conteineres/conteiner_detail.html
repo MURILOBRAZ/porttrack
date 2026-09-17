@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}{{ object.numero }}{% endblock %}
+{% block content %}
+<a href="{% url 'conteiner_list' %}" class="text-decoration-none small"><i class="bi bi-arrow-left"></i> Contêineres</a>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-2 mb-4">
+  <div>
+    <h1 class="h2 fw-bold font-mono mb-1">{{ object.numero }}</h1>
+    {% include "conteineres/_badges_conteiner.html" with c=object %}
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'conteiner_update' object.pk %}" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i> Editar</a>
+    <a href="{% url 'conteiner_delete' object.pk %}" class="btn btn-outline-danger" title="Excluir"><i class="bi bi-trash"></i></a>
+    <a href="{% url 'movimentacao_create' %}?conteiner={{ object.pk }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Movimentação</a>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card"><div class="card-body">
+      <h2 class="h6 fw-semibold mb-3">Dados do contêiner</h2>
+      <dl class="row mb-0 small">
+        <dt class="col-5 text-body-secondary fw-normal">Cliente</dt><dd class="col-7"><a href="{{ object.cliente.get_absolute_url }}">{{ object.cliente }}</a></dd>
+        <dt class="col-5 text-body-secondary fw-normal">Tipo</dt><dd class="col-7">{{ object.get_tipo_display }}</dd>
+        <dt class="col-5 text-body-secondary fw-normal">Status</dt><dd class="col-7">{{ object.get_status_display }}</dd>
+        <dt class="col-5 text-body-secondary fw-normal">Categoria</dt><dd class="col-7">{{ object.get_categoria_display }}</dd>
+        <dt class="col-5 text-body-secondary fw-normal">Proprietário</dt><dd class="col-7 font-mono">{{ object.numero|slice:":3" }}</dd>
+        <dt class="col-5 text-body-secondary fw-normal">Cadastrado em</dt><dd class="col-7">{{ object.criado_em|date:"d/m/Y H:i" }}</dd>
+        <dt class="col-5 text-body-secondary fw-normal">Atualizado em</dt><dd class="col-7 mb-0">{{ object.atualizado_em|date:"d/m/Y H:i" }}</dd>
+      </dl>
+    </div></div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card"><div class="card-body">
+      <h2 class="h6 fw-semibold mb-3">Histórico de movimentações <span class="badge text-bg-secondary">{{ movimentacoes|length }}</span></h2>
+      {% if movimentacoes %}
+      <ul class="timeline mb-0">
+        {% for m in movimentacoes %}
+        <li class="{% if m.em_andamento %}em-andamento{% endif %}">
+          <div class="d-flex flex-wrap justify-content-between gap-2">
+            <div>
+              <div class="fw-semibold">{{ m.get_tipo_display }} {% include "conteineres/_badge_movimentacao.html" %}</div>
+              <small class="text-body-secondary">
+                {{ m.data_inicio|date:"d/m/Y H:i" }} → {% if m.data_fim %}{{ m.data_fim|date:"d/m/Y H:i" }}{% else %}agora{% endif %}
+                · {{ m.data_inicio|timesince:m.data_fim }}
+              </small>
+              {% if m.observacao %}<div class="small mt-1">{{ m.observacao|linebreaksbr }}</div>{% endif %}
+            </div>
+            <div class="text-nowrap">
+              {% if m.em_andamento %}
+              <form method="post" action="{% url 'movimentacao_finalizar' m.pk %}" class="d-inline">{% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <button class="btn btn-sm btn-outline-success" title="Finalizar agora"><i class="bi bi-check2-circle"></i> Finalizar</button>
+              </form>
+              {% endif %}
+              <a href="{% url 'movimentacao_update' m.pk %}" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="bi bi-pencil"></i></a>
+              <a href="{% url 'movimentacao_delete' m.pk %}" class="btn btn-sm btn-outline-danger" title="Excluir"><i class="bi bi-trash"></i></a>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+        <p class="text-body-secondary text-center py-4 mb-0">Nenhuma movimentação registrada para este contêiner.</p>
+      {% endif %}
+    </div></div>
+  </div>
+</div>
+{% endblock %}
