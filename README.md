@@ -1,6 +1,6 @@
 # 🚢 PortTrack — Gestão de Contêineres
 
-[![CI](https://github.com/MURILOBRAZ/TestePratico_Conteiners/actions/workflows/ci.yml/badge.svg)](https://github.com/MURILOBRAZ/TestePratico_Conteiners/actions/workflows/ci.yml)
+[![CI](https://github.com/MURILOBRAZ/porttrack/actions/workflows/ci.yml/badge.svg)](https://github.com/MURILOBRAZ/porttrack/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12+-3776AB?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/django-5.2_LTS-092E20?logo=django&logoColor=white)
 ![DRF](https://img.shields.io/badge/API-Django_REST_Framework-A30000)
@@ -36,7 +36,7 @@ dashboard com indicadores e relatório exportável.
 | Documentação da API | drf-spectacular (OpenAPI 3, Swagger UI, ReDoc)                 |
 | Frontend        | Django Templates, Bootstrap 5, Bootstrap Icons, Chart.js           |
 | Banco de dados  | SQLite (desenvolvimento) · PostgreSQL (produção)                   |
-| Qualidade       | Testes com `unittest`/Django (33 testes, ~96% de cobertura), Ruff, GitHub Actions |
+| Qualidade       | Testes com `unittest`/Django (35 testes, ~96% de cobertura), Ruff, GitHub Actions |
 | Infraestrutura  | Docker, Docker Compose, WhiteNoise, Vercel                         |
 
 ## 🗂️ Estrutura
@@ -73,8 +73,8 @@ erDiagram
 Pré-requisito: Python 3.12 ou superior.
 
 ```bash
-git clone https://github.com/MURILOBRAZ/TestePratico_Conteiners.git
-cd TestePratico_Conteiners
+git clone https://github.com/MURILOBRAZ/porttrack.git
+cd porttrack
 
 python -m venv .venv
 # Windows (PowerShell): .\.venv\Scripts\Activate.ps1
