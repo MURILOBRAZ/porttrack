@@ -171,3 +171,19 @@ class CadastroTests(TestCase):
     def test_usuario_logado_e_redirecionado(self):
         self.client.force_login(criar_usuario())
         self.assertRedirects(self.client.get(reverse("cadastro")), reverse("dashboard"))
+
+
+class CsrfFailureTests(TestCase):
+    def setUp(self):
+        self.client = self.client_class(enforce_csrf_checks=True)
+
+    def test_anonimo_ve_pagina_amigavel(self):
+        response = self.client.post(reverse("cadastro"), {"username": "x"})
+        self.assertEqual(response.status_code, 403)
+        self.assertContains(response, "Este formulário expirou", status_code=403)
+
+    def test_usuario_logado_e_redirecionado_ao_dashboard(self):
+        # Simula o segundo envio de um clique duplo: usuário já autenticado, token antigo.
+        self.client.force_login(criar_usuario())
+        response = self.client.post(reverse("cadastro"), {"csrfmiddlewaretoken": "token-antigo"})
+        self.assertRedirects(response, reverse("dashboard"))

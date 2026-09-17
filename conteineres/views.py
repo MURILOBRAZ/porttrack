@@ -8,7 +8,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.db import DatabaseError
 from django.db.models import Count, ProtectedError
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -281,6 +281,19 @@ class RelatorioCsvView(LoginRequiredMixin, TemplateView):
 
 
 # ------------------------------------------------------------ Health check
+
+
+def csrf_failure(request, reason=""):
+    """Substitui a página crua de erro CSRF do Django.
+
+    O caso mais comum é o envio duplicado de um formulário (ex.: clique duplo no cadastro ou login):
+    o primeiro envio autentica o usuário e troca o token, e o segundo chega com o token antigo.
+    """
+    logger.warning("Falha de CSRF em %s: %s", request.path, reason)
+    if request.user.is_authenticated:
+        messages.info(request, "Sua sessão foi atualizada. Você já está conectado.")
+        return redirect("dashboard")
+    return render(request, "403_csrf.html", status=403)
 
 
 class HealthCheckView(View):
