@@ -55,7 +55,7 @@ dashboard com indicadores e relatório exportável.
 | Documentação da API | drf-spectacular (OpenAPI 3, Swagger UI, ReDoc)                 |
 | Frontend        | Django Templates, Bootstrap 5, Bootstrap Icons, Chart.js           |
 | Banco de dados  | SQLite (desenvolvimento) · PostgreSQL (produção)                   |
-| Qualidade       | Testes com `unittest`/Django (39 testes, ~96% de cobertura), Ruff, GitHub Actions |
+| Qualidade       | Testes com `unittest`/Django (41 testes, ~96% de cobertura), Ruff, GitHub Actions |
 | Infraestrutura  | Docker, Docker Compose, WhiteNoise, Vercel                         |
 
 ## 🗂️ Estrutura
