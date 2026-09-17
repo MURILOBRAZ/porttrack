@@ -10,7 +10,7 @@ Sistema web e API REST para controle de **clientes, contêineres e movimentaçõ
 cadastro com validação do código **ISO 6346**, histórico de operações (gate in/out, embarque, scanner…),
 dashboard com indicadores e relatório exportável.
 
-> **Demo:** _adicione aqui o link da Vercel_ · usuário `demo` · senha `demo1234`
+> **Demo:** https://porttrack-mb.vercel.app · clique em **Entrar com a conta demo** ou crie sua conta
 
 ---
 
@@ -25,7 +25,7 @@ dashboard com indicadores e relatório exportável.
 - **Linha do tempo** com o histórico de cada contêiner
 - **Relatório** por cliente × tipo de movimentação, com exportação em **CSV** (compatível com Excel)
 - **API REST** documentada com **Swagger/OpenAPI**
-- Autenticação, mensagens de feedback, **tema claro/escuro** e layout responsivo (Bootstrap 5)
+- Cadastro de usuários, acesso com um clique à conta demo, mensagens de feedback, **tema claro/escuro** e layout responsivo (Bootstrap 5)
 - Proteção contra exclusão de clientes com contêineres vinculados
 
 ## 🧱 Stack
@@ -36,7 +36,7 @@ dashboard com indicadores e relatório exportável.
 | Documentação da API | drf-spectacular (OpenAPI 3, Swagger UI, ReDoc)                 |
 | Frontend        | Django Templates, Bootstrap 5, Bootstrap Icons, Chart.js           |
 | Banco de dados  | SQLite (desenvolvimento) · PostgreSQL (produção)                   |
-| Qualidade       | Testes com `unittest`/Django (35 testes, ~96% de cobertura), Ruff, GitHub Actions |
+| Qualidade       | Testes com `unittest`/Django (39 testes, ~96% de cobertura), Ruff, GitHub Actions |
 | Infraestrutura  | Docker, Docker Compose, WhiteNoise, Vercel                         |
 
 ## 🗂️ Estrutura
