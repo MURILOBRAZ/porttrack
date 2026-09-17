@@ -161,6 +161,20 @@ python -c "from django.core.management.utils import get_random_secret_key as k; 
 > Como o usuário de demonstração pode editar e excluir dados, rode `python manage.py seed_demo --reset`
 > (apontando para o banco de produção) sempre que quiser restaurar os dados de exemplo.
 
+### 💓 Health check e keep-alive
+
+O endpoint público **`/health/`** faz uma consulta real ao banco e retorna `200` (ou `503` se o banco estiver
+indisponível). O workflow [`keepalive.yml`](.github/workflows/keepalive.yml) chama esse endpoint **a cada 3 dias**,
+o que evita que o projeto gratuito do Supabase seja pausado por inatividade (limite de 7 dias).
+
+Para ativar, crie a variável do repositório em **Settings → Secrets and variables → Actions → Variables**:
+
+| Variável          | Valor                                   |
+| ----------------- | --------------------------------------- |
+| `HEALTHCHECK_URL` | `https://seu-app.vercel.app/health/`    |
+
+Você também pode rodar o workflow manualmente pela aba **Actions → Keep-alive → Run workflow**.
+
 ## 📄 Licença
 
 Distribuído sob a licença MIT. Veja [LICENSE](LICENSE).
