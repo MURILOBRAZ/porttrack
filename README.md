@@ -10,7 +10,26 @@ Sistema web e API REST para controle de **clientes, contêineres e movimentaçõ
 cadastro com validação do código **ISO 6346**, histórico de operações (gate in/out, embarque, scanner…),
 dashboard com indicadores e relatório exportável.
 
-> **Demo:** https://porttrack-mb.vercel.app · clique em **Entrar com a conta demo** ou crie sua conta
+> **Demo:** https://porttrack-mb.vercel.app · entre com usuário `demo` e senha `demo1234`, ou crie sua conta
+
+![Dashboard do PortTrack](docs/screenshots/dashboard.png)
+
+---
+
+## 📸 Telas
+
+| Contêineres | Histórico do contêiner |
+| --- | --- |
+| ![Lista de contêineres com busca e filtros](docs/screenshots/conteineres.png) | ![Linha do tempo de movimentações de um contêiner](docs/screenshots/conteiner-detalhe.png) |
+| **Relatório por cliente** | **API REST (Swagger)** |
+| ![Relatório de movimentações por cliente e tipo](docs/screenshots/relatorio.png) | ![Documentação da API no Swagger](docs/screenshots/api-swagger.png) |
+| **Tema escuro** | **Login** |
+| ![Dashboard no tema escuro](docs/screenshots/dashboard-dark.png) | ![Tela de login](docs/screenshots/login.png) |
+
+<p align="center">
+  <img src="docs/screenshots/dashboard-mobile.png" alt="Dashboard em um celular" width="260"><br>
+  <em>Layout responsivo</em>
+</p>
 
 ---
 
@@ -25,7 +44,7 @@ dashboard com indicadores e relatório exportável.
 - **Linha do tempo** com o histórico de cada contêiner
 - **Relatório** por cliente × tipo de movimentação, com exportação em **CSV** (compatível com Excel)
 - **API REST** documentada com **Swagger/OpenAPI**
-- Cadastro de usuários, acesso com um clique à conta demo, mensagens de feedback, **tema claro/escuro** e layout responsivo (Bootstrap 5)
+- Cadastro de usuários, conta de demonstração, mensagens de feedback, **tema claro/escuro** e layout responsivo (Bootstrap 5)
 - Proteção contra exclusão de clientes com contêineres vinculados
 
 ## 🧱 Stack
