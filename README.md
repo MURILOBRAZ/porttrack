@@ -10,7 +10,7 @@ Sistema web e API REST para controle de **clientes, contêineres e movimentaçõ
 cadastro com validação do código **ISO 6346**, histórico de operações (gate in/out, embarque, scanner…),
 dashboard com indicadores e relatório exportável.
 
-> **Demo:** https://porttrack-mb.vercel.app · entre com usuário `demo` e senha `demo1234`, ou crie sua conta
+> **Demo:** https://porttrack-mb.vercel.app · crie sua conta em **Cadastre-se** para explorar o sistema
 
 ![Dashboard do PortTrack](docs/screenshots/dashboard.png)
 
@@ -158,7 +158,7 @@ A Vercel executa o Django como função serverless. Como o sistema de arquivos l
    ```bash
    # PowerShell: $env:DATABASE_URL="postgres://..."; $env:DJANGO_DEBUG="true"
    DATABASE_URL="postgres://...?...sslmode=require" DJANGO_DEBUG=true python manage.py migrate
-   DATABASE_URL="postgres://...?...sslmode=require" DJANGO_DEBUG=true python manage.py seed_demo
+   DATABASE_URL="postgres://...?...sslmode=require" DJANGO_DEBUG=true python manage.py seed_demo --password "uma-senha-forte"
    ```
 3. Importe o repositório na Vercel (**Add New → Project**). O `vercel.json` já aponta para `config/wsgi.py`.
 4. Em **Settings → Environment Variables**, configure:
