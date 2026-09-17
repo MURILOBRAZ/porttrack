@@ -2,6 +2,7 @@ import csv
 import logging
 
 from django.contrib import messages
+from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import DatabaseError
@@ -17,10 +18,29 @@ from django_filters.views import FilterView
 
 from . import services
 from .filters import ConteinerFilter, MovimentacaoFilter
-from .forms import ClienteForm, ConteinerForm, MovimentacaoForm
+from .forms import CadastroForm, ClienteForm, ConteinerForm, MovimentacaoForm
 from .models import Cliente, Conteiner, Movimentacao
 
 logger = logging.getLogger(__name__)
+
+
+class CadastroView(CreateView):
+    """Cadastro público de usuários; após criar a conta, o usuário já entra no sistema."""
+
+    form_class = CadastroForm
+    template_name = "registration/cadastro.html"
+    success_url = reverse_lazy("dashboard")
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("dashboard")
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        login(self.request, self.object, backend="django.contrib.auth.backends.ModelBackend")
+        messages.success(self.request, f"Bem-vindo(a), {self.object.username}! Sua conta foi criada.")
+        return response
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):

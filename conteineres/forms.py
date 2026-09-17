@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 
 from .models import Cliente, Conteiner, Movimentacao
 
@@ -71,3 +72,10 @@ class MovimentacaoForm(BootstrapFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["conteiner"].queryset = Conteiner.objects.select_related("cliente")
+
+
+class CadastroForm(BootstrapFormMixin, UserCreationForm):
+    email = forms.EmailField(label="E-mail", required=False, help_text="Opcional.")
+
+    class Meta(UserCreationForm.Meta):
+        fields = ["username", "email"]

@@ -1,5 +1,6 @@
 from io import StringIO
 
+from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
@@ -142,3 +143,31 @@ class HealthCheckTests(TestCase):
             response = self.client.get(reverse("health"))
         self.assertEqual(response.status_code, 503)
         self.assertEqual(response.json()["database"], "unavailable")
+
+
+class CadastroTests(TestCase):
+    def test_pagina_de_cadastro_e_link_no_login(self):
+        self.assertEqual(self.client.get(reverse("cadastro")).status_code, 200)
+        self.assertContains(self.client.get(reverse("login")), reverse("cadastro"))
+
+    def test_cadastro_cria_usuario_e_faz_login(self):
+        response = self.client.post(
+            reverse("cadastro"),
+            {"username": "recrutador", "email": "", "password1": "Senha-Forte-2026", "password2": "Senha-Forte-2026"},
+        )
+        self.assertRedirects(response, reverse("dashboard"))
+        self.assertTrue(get_user_model().objects.filter(username="recrutador").exists())
+        self.assertEqual(self.client.get(reverse("dashboard")).status_code, 200)
+
+    def test_cadastro_rejeita_senhas_diferentes(self):
+        response = self.client.post(
+            reverse("cadastro"),
+            {"username": "fulano", "password1": "Senha-Forte-2026", "password2": "Outra-Senha-2026"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "is-invalid")
+        self.assertFalse(get_user_model().objects.filter(username="fulano").exists())
+
+    def test_usuario_logado_e_redirecionado(self):
+        self.client.force_login(criar_usuario())
+        self.assertRedirects(self.client.get(reverse("cadastro")), reverse("dashboard"))

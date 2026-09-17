@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Criar conta{% endblock %}
+{% block main_class %}login-bg d-flex align-items-center justify-content-center px-3 py-4{% endblock %}
+{% block content %}
+<div class="card shadow-lg" style="width: 100%; max-width: 440px;">
+  <div class="card-body p-4 p-md-5">
+    <div class="text-center mb-4">
+      <span class="brand-icon fs-4 mb-2" style="width:3rem;height:3rem"><i class="bi bi-box-seam"></i></span>
+      <h1 class="h4 fw-bold mb-1">Criar conta</h1>
+      <p class="text-body-secondary small mb-0">Cadastre-se para acessar o PortTrack</p>
+    </div>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger py-2 small">{% for e in form.non_field_errors %}{{ e }}<br>{% endfor %}</div>
+      {% endif %}
+      <div class="row g-3">
+        {% for field in form %}
+          {% include "conteineres/_field.html" %}
+        {% endfor %}
+      </div>
+      <button class="btn btn-primary w-100 py-2 mt-4" type="submit">Criar conta</button>
+    </form>
+
+    <p class="text-center small mt-3 mb-0">
+      Já tem conta? <a href="{% url 'login' %}" class="fw-semibold">Entrar</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

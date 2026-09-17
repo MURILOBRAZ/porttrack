@@ -4,6 +4,8 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
+from conteineres.views import CadastroView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(
@@ -15,6 +17,7 @@ urlpatterns = [
         name="login",
     ),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("cadastro/", CadastroView.as_view(), name="cadastro"),
     path("api/", include("conteineres.api.urls")),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
