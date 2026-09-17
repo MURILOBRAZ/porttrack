@@ -120,3 +120,25 @@ class SeedDemoTests(TestCase):
         for conteiner in Conteiner.objects.all():
             conteiner.full_clean()
         self.assertTrue(self.client.login(username="demo", password="demo1234"))
+
+
+class HealthCheckTests(TestCase):
+    def test_health_publico_consulta_o_banco(self):
+        criar_conteiner()
+        response = self.client.get(reverse("health"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], "ok")
+        self.assertEqual(response.json()["conteineres"], 1)
+
+    def test_health_retorna_503_quando_banco_falha(self):
+        from unittest import mock
+
+        from django.db import OperationalError
+
+        with (
+            mock.patch("conteineres.views.Conteiner.objects.count", side_effect=OperationalError),
+            self.assertLogs("conteineres.views", level="ERROR"),
+        ):
+            response = self.client.get(reverse("health"))
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()["database"], "unavailable")

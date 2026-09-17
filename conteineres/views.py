@@ -1,14 +1,17 @@
 import csv
+import logging
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db import DatabaseError
 from django.db.models import Count, ProtectedError
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, TemplateView, UpdateView
 from django_filters.views import FilterView
 
@@ -16,6 +19,8 @@ from . import services
 from .filters import ConteinerFilter, MovimentacaoFilter
 from .forms import ClienteForm, ConteinerForm, MovimentacaoForm
 from .models import Cliente, Conteiner, Movimentacao
+
+logger = logging.getLogger(__name__)
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -253,3 +258,26 @@ class RelatorioCsvView(LoginRequiredMixin, TemplateView):
                 ]
             )
         return response
+
+
+# ------------------------------------------------------------ Health check
+
+
+class HealthCheckView(View):
+    """Endpoint público usado por monitoramento e pelo keep-alive do banco.
+
+    Executa uma consulta real em uma tabela da aplicação, o que conta como
+    atividade no banco (evita a pausa por inatividade do plano gratuito do Supabase).
+    """
+
+    http_method_names = ["get", "head"]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            total = Conteiner.objects.count()
+        except DatabaseError:
+            logger.exception("Health check: falha ao acessar o banco de dados")
+            return JsonResponse({"status": "error", "database": "unavailable"}, status=503)
+        return JsonResponse(
+            {"status": "ok", "database": "ok", "conteineres": total, "timestamp": timezone.now().isoformat()}
+        )
